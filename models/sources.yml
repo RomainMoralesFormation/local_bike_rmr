@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: local_bike_sales
+    schema: local_bike
+    tables:
+      - name: customers
+      - name: orders
+      - name: order_items
+      - name: staffs
+      - name: stores
+
+  - name: local_bike_production
+    schema: local_bike
+    tables:
+      - name: brands
+      - name: categories
+      - name: products
+      - name: stocks

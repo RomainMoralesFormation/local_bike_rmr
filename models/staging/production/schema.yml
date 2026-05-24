@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: stg_production__brands
+    description: "Table de référence des marques de produits"
+    columns:
+      - name: brand_id
+        description: 'Clés primaire de la table de référence des marques de produits'
+        tests:
+          - unique
+          - not_null
+  
+  - name: stg_production__categories
+    description: "Table de référence des catégories de produits"
+    columns:
+      - name: category_id
+        description: 'Clés primaire de la table de référence des catégories de produits'
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_production__products
+    description: "Description des produits"
+    columns:
+      - name: product_id
+        description: 'Clés primaire de la table des produits'
+        tests:
+          - unique
+          - not_null
+      
+      - name: brand_id
+        description: "Clés étrangère des marques de produits"
+        tests:
+          - relationships:
+              arguments:
+                name: brand_id_fk_stg_production__brands
+                to: ref('stg_production__brands')
+                field: brand_id
+
+      - name: category_id
+        description: "Clés étrangère des marques de produits"
+        tests:
+          - relationships:
+              arguments:
+                name: category_id_fk_stg_production__categories
+                to: ref('stg_production__categories')
+                field: category_id
+
+  - name: stg_production__stocks
+    description: "Etat des stocks par produit pour chaque boutique"
+    columns:
+      - name: sk_stocks
+        description: 'Clés technique de la table des stocks - combinaison store_id et product_id'
+        tests:
+          - unique
+          - not_null
+
+      - name: product_id
+        description: "Clés étrangère des produits"
+        tests:
+          - relationships:
+              arguments:
+                name: product_id_fk_stg_production__products
+                to: ref('stg_production__products')
+                field: product_id

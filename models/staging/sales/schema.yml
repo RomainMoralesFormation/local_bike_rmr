@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: stg_sales__customers
+    description: "Description des clients"
+    columns:
+      - name: customer_id
+        description: 'Clés primaire de la table des clients'
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_sales__orders
+    description: "Description des commandes réalisées par les clients"
+    columns:
+     - name: order_id
+       description: 'Clés primaire de la table des commandes'
+       tests:
+         - unique
+         - not_null
+
+  - name: stg_sales__order_items
+    description: "Détail des commandes réalisées par les clients à la granularité produit"
+    columns:
+     - name: sk_order_items
+       description: 'Clés primaire de la table du détail des commandes'
+       tests:
+         - unique
+         - not_null
+
+  - name: stg_sales__staffs
+    description: "Description du vendeur"
+    columns:
+     - name: staff_id
+       description: 'Clés primaire de la table de description du vendeur'
+       tests:
+         - unique
+         - not_null
+
+  - name: stg_sales__stores
+    description: "Description de la boutique dans laquelle a été réalisée la commande"
+    columns:
+     - name: store_id
+       description: 'Clés primaire de la table de description du vendeur'
+       tests:
+         - unique
+         - not_null

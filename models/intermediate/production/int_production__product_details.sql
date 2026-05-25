@@ -25,4 +25,3 @@ JOIN {{ref('stg_production__categories')}} c
 -- Récupération du libellé de la marque
 JOIN {{ref('stg_production__brands')}} b
     on p.brand_id = b.brand_id
-;

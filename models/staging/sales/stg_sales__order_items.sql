@@ -5,6 +5,6 @@ SELECT
   item_id,
   list_price as unit_price,
   product_id,
-  quantity,
+  quantity as quantity_ordered,
   discount
 FROM {{ source('local_bike_sales', 'order_items') }}

@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: int_production__product_details
+    description: "Modèle intermédiaire enrichissant les produits de Local Bike avec leurs catégories et marques respectives et apportant un découpage par marché (Aventure, Mixte et Urbain)"
+    columns:
+      - name: product_id
+        description: "Clé primaire. Identifiant unique du produit"
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: "Nom commercial du vélo"
+        tests:
+          - not_null
+      - name: brand_name
+        description: "Marque du vélo (ex: Trek, Electra)"
+        tests:
+          - not_null
+      - name: category_name
+        description: "Catégorie du vélo (Cruisers, Mountain Bikes, Road Bikes, etc.), essentielle pour identifier l'usage (aventure ou quotidien)."
+        tests:
+          - not_null

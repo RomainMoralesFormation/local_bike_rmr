@@ -1,4 +1,3 @@
-
 SELECT
     order_id,
     customer_id,
@@ -23,4 +22,4 @@ SELECT
         else 'En retard'
     end as status_delivery_times
     
-FROM {{ref('stg_sales__orders')}}
+FROM {{ ref('stg_sales__orders') }}

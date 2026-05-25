@@ -29,7 +29,7 @@ models:
           - not_null
       
       - name: brand_id
-        description: "Clés étrangère des marques de produits"
+        description: "Clés étrangère de la table des marques de produits"
         tests:
           - relationships:
               arguments:
@@ -38,7 +38,7 @@ models:
                 field: brand_id
 
       - name: category_id
-        description: "Clés étrangère des marques de produits"
+        description: "Clés étrangère de la table des marques de produits"
         tests:
           - relationships:
               arguments:
@@ -56,10 +56,19 @@ models:
           - not_null
 
       - name: product_id
-        description: "Clés étrangère des produits"
+        description: "Clés étrangère de la table des produits"
         tests:
           - relationships:
               arguments:
                 name: product_id_fk_stg_production__products
                 to: ref('stg_production__products')
                 field: product_id
+
+      - name: store_id
+        description: "Clés étrangère des boutiques"
+        tests:
+          - relationships:
+              arguments:
+               name: product_id_fk_stg_sales__stores
+               to: ref('stg_sales__stores')
+               field: store_id

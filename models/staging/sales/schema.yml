@@ -19,6 +19,33 @@ models:
          - unique
          - not_null
 
+     - name: customer_id
+       description: "Clés étrangère des clients"
+       tests:
+         - relationships:
+             arguments:
+              name: customer_id_fk_stg_sales__customers
+              to: ref('stg_sales__customers')
+              field: customer_id
+
+     - name: staff_id
+       description: "Clés étrangère des vendeurs"
+       tests:
+         - relationships:
+             arguments:
+              name: staff_id_fk_stg_sales__staffs
+              to: ref('stg_sales__staffs')
+              field: staff_id
+
+     - name: store_id
+       description: "Clés étrangère des boutiques"
+       tests:
+         - relationships:
+             arguments:
+              name: store_id_fk_stg_sales__stores
+              to: ref('stg_sales__stores')
+              field: store_id
+
   - name: stg_sales__order_items
     description: "Détail des commandes réalisées par les clients à la granularité produit"
     columns:
@@ -27,6 +54,15 @@ models:
        tests:
          - unique
          - not_null
+     
+     - name: product_id
+       description: "Clés étrangère des produits"
+       tests:
+         - relationships:
+             arguments:
+              name: product_id_fk_stg_production__products
+              to: ref('stg_production__products')
+              field: product_id
 
   - name: stg_sales__staffs
     description: "Description du vendeur"
@@ -36,6 +72,15 @@ models:
        tests:
          - unique
          - not_null
+
+     - name: store_id
+       description: "Clés étrangère des boutiques"
+       tests:
+         - relationships:
+             arguments:
+              name: store_id_fk_stg_sales__stores
+              to: ref('stg_sales__stores')
+              field: store_id
 
   - name: stg_sales__stores
     description: "Description de la boutique dans laquelle a été réalisée la commande"

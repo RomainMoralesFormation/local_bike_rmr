@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: int_production__store_stock_status
+    description: >
+      Modèle intermédiaire consolidant l'état des stocks par produit et par boutique physique de Local Bike (Santa Cruz, Baldwin, Rowlett). 
+      Il intègre une segmentation opérationnelle des niveaux de stock afin d'aider l'équipe des opérations à piloter les réapprovisionnements 
+      et à éviter les ruptures de stock sur les segments clés (vélos du quotidien et vélos d'aventure).
+    
+    columns:
+      - name: store_id
+        description: "Identifiant unique de la boutique Local Bike"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_sales__stores')
+              field: store_id
+
+      - name: store_name
+        description: "Nom commercial de la boutique (ex: Santa Cruz, Baldwin, Rowlett)"
+        tests:
+          - not_null
+
+      - name: store_city
+        description: "Ville où est implantée la boutique"
+        tests:
+          - not_null
+
+      - name: store_state
+        description: "État américain d'implantation (CA, NY, TX), utile pour les segmentations géographiques dans Looker"
+        tests:
+          - not_null
+
+      - name: product_id
+        description: "Identifiant unique du produit (vélo ou accessoire) au catalogue de production"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_production__products')
+              field: product_id
+
+      - name: available_stock_quantity
+        description: "Quantité physique réelle d'unités disponibles en stock dans la boutique donnée"
+        tests:
+          - not_null
+
+      - name: stock_status
+        description: >
+          Indicateur de santé du stock calculé à partir de la quantité disponible :
+          - 'Rupture totale' (si quantité = 0)
+          - 'Stock critique' (si quantité <= 5)
+          - 'Stock suffisant' (au-dessus de 5)
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Rupture totale', 'Stock critique', 'Stock suffisant']

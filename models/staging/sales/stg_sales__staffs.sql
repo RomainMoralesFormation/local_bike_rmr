@@ -3,7 +3,7 @@ SELECT
   email,
   first_name,
   last_name,
-  manager_id,
+  safe_cast(manager_id as int) as manager_id,
   phone,
   staff_id,
   store_id

@@ -1,0 +1,141 @@
+version: 2
+
+models:
+
+  #############################################################################
+  # 1. MODEL: mrt_production__dim_products
+  # Description: Dimension Catalogue Produits enrichie et segmentée par gamme.
+  #############################################################################
+  - name: mrt_production__dim_products
+    description: "Dimension regroupe l'ensemble des vélos vendus par Local Bike, enrichie avec les marques, catégories et segments de prix."
+    columns:
+      - name: product_id
+        description: "Clé primaire unique du produit."
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: "Nom commercial complet du vélo."
+        tests:
+          - not_null
+      - name: price
+        description: "Prix catalogue / unitaire de base (list_price)."
+        tests:
+          - not_null
+      - name: price_segment
+        description: "Positionnement de gamme calculé dynamiquement par percentile."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Elite Range', 'High end', 'Mid-range', 'Entry Level']
+
+  #############################################################################
+  # 2. MODEL: mrt_production__stock_in_stores
+  # Description: Table opérationnelle des stocks physiques en temps réel.
+  #############################################################################
+  - name: mrt_production__stock_in_stores
+    description: "État des stocks actuels par produit et par magasin physique (Santa Cruz, Baldwin, Rowlett)."
+    columns:
+      - name: sk_stocks
+        description: "Clé artificielle unique (surrogate key) du stock par magasin et produit."
+        tests:
+          - unique
+          - not_null
+      - name: store_id
+        description: "Identifiant du magasin physique."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_sales__stores')
+                field: store_id
+      - name: product_id
+        description: "Clé étrangère du produit concerné."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('mrt_production__dim_products')
+                field: product_id
+      - name: available_stock_quantity
+        description: "Quantité physique actuellement disponible en rayon/réserve."
+        tests:
+          - not_null
+
+  #############################################################################
+  # 3. MODEL: mrt_sales__dim_customers
+  # Description: Dimension Profil Client contenant la LTV et la récurrence.
+  #############################################################################
+  - name: mrt_sales__dim_customers
+    description: "Dimension client consolide le comportement d'achat de chaque utilisateur (Valeur Vie Client Net ou LTV, volumes, délais)."
+    columns:
+      - name: customer_id
+        description: "Clé primaire unique du client."
+        tests:
+          - unique
+          - not_null
+
+  #############################################################################
+  # 4. MODEL: mrt_sales__fct_order_details
+  # Description: Table de faits centrale des transactions à la ligne d'article.
+  #############################################################################
+  - name: mrt_sales__fct_order_details
+    description: "Table de faits centrale des ventes de Local Bike à la maille ligne d'article."
+    columns:
+      - name: sk_order_items
+        description: "Clé primaire unique de la ligne d'article (surrogate key)."
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: "Identifiant de la commande."
+        tests:
+          - not_null
+      - name: customer_id
+        description: "Clé étrangère pointant vers la dimension client."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('mrt_sales__dim_customers')
+                field: customer_id
+      - name: product_id
+        description: "Clé étrangère pointant vers la dimension produit."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('mrt_production__dim_products')
+                field: product_id
+      - name: staff_id
+        description: "Clé étrangère pointant vers le membre du personnel ayant réalisé la vente."
+        tests:
+          - relationships:
+              arguments:
+                to: ref('mrt_sales__staffs_and_managers')
+                field: staff_id
+      - name: order_date
+        description: "Date de création de la commande."
+        tests:
+          - not_null
+      - name: quantity_ordered
+        description: "Quantité d'unités achetées pour cette ligne de produit."
+        tests:
+          - not_null
+
+  #############################################################################
+  # 5. MODEL: mrt_sales__staffs_and_managers
+  # Description: Dimension RH aplatie modélisant la force de vente.
+  #############################################################################
+  - name: mrt_sales__staffs_and_managers
+    description: "Dimension modélisant l'organisation interne, la force de vente et l'arbre de management chez Local Bike."
+    columns:
+      - name: staff_id
+        description: "Clé primaire unique du membre du personnel."
+        tests:
+          - unique
+          - not_null
+      - name: staff_full_name
+        description: "Prénom et nom de l'employé."
+        tests:
+          - not_null
+      - name: is_active_staff
+        description: "Statut d'activité de l'employé (1 = Actif, 0 = Inactif)."

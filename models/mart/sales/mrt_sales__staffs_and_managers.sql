@@ -1,5 +1,5 @@
 SELECT
-    s.staff_id,
+    staff_id,
     staff_full_name,
     is_active_staff,
     store_id,

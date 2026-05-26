@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int_production__store_stock_status
+  - name: int_production__stock_in_stores
     description: >
       Modèle intermédiaire consolidant l'état des stocks par produit et par boutique physique de Local Bike (Santa Cruz, Baldwin, Rowlett). 
       Il intègre une segmentation opérationnelle des niveaux de stock afin d'aider l'équipe des opérations à piloter les réapprovisionnements 
@@ -13,8 +13,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('stg_sales__stores')
-              field: store_id
+              arguments:
+                to: ref('stg_sales__stores')
+                field: store_id
 
       - name: store_name
         description: "Nom commercial de la boutique (ex: Santa Cruz, Baldwin, Rowlett)"
@@ -36,8 +37,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('stg_production__products')
-              field: product_id
+              arguments:
+                to: ref('stg_production__products')
+                field: product_id
 
       - name: available_stock_quantity
         description: "Quantité physique réelle d'unités disponibles en stock dans la boutique donnée"
@@ -53,4 +55,5 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Rupture totale', 'Stock critique', 'Stock suffisant']
+              arguments:
+                values: ['Rupture totale', 'Stock critique', 'Stock suffisant']

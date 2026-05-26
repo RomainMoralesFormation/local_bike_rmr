@@ -1,7 +1,7 @@
 SELECT
      oi.sk_order_items
     ,oi.order_id
-    ,oi.item_id
+    ,o.customer_id
     ,oi.product_id
     ,o.store_id
     ,o.staff_id

@@ -14,8 +14,9 @@ SELECT
             then 'Quotidien & Urbain'
         when lower(c.category_name) like any('%cyclocross%', '%electric%')
             then 'Mixte'
-        else 'Segment à définir'
+        else 'Marché à définir'
     end as product_market
+    
 FROM {{ref('stg_production__products')}} p
 
 -- Récupération du libellé de la catégories

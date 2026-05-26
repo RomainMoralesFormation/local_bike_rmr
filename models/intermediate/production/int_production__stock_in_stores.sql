@@ -1,4 +1,5 @@
 SELECT
+    stk.sk_stocks,
     stk.store_id,
     str.store_name,
     str.city as store_city,
